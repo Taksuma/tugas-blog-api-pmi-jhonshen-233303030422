@@ -1,8 +1,9 @@
-const { post_blog } = require('../models'); 
+const { post_blog } = require('../models');
+
 exports.createPost = async (req, res) => {
     try {
         const { title, content, authorName } = req.body;
-        const newPost = await post_blog.create({ title, content, authorName }); 
+        const newPost = await post_blog.create({ title, content, authorName });
         res.status(201).json({ message: 'Post berhasil dibuat', post: newPost });
     } catch (error) {
         console.error('Error saat membuat post:', error);
@@ -12,7 +13,7 @@ exports.createPost = async (req, res) => {
 
 exports.getAllPosts = async (req, res) => {
     try {
-        const posts = await post_blog.findAll(); 
+        const posts = await post_blog.findAll();
         res.status(200).json(posts);
     } catch (error) {
         console.error('Error saat mengambil semua post:', error);
@@ -23,7 +24,7 @@ exports.getAllPosts = async (req, res) => {
 exports.getPostById = async (req, res) => {
     try {
         const { id } = req.params;
-        const post = await post_blog.findByPk(id); 
+        const post = await post_blog.findByPk(id);
         if (!post) {
             return res.status(404).json({ message: 'Post tidak ditemukan.' });
         }
@@ -38,7 +39,6 @@ exports.updatePost = async (req, res) => {
     try {
         const { id } = req.params;
         const { title, content, authorName } = req.body;
-
         const post = await post_blog.findByPk(id);
         if (!post) {
             return res.status(404).json({ message: 'Post tidak ditemukan.' });
@@ -59,13 +59,11 @@ exports.updatePost = async (req, res) => {
 exports.deletePost = async (req, res) => {
     try {
         const { id } = req.params;
-
         const post = await post_blog.findByPk(id);
         if (!post) {
             return res.status(404).json({ message: 'Post tidak ditemukan.' });
         }
-
-        await post.destroy();
+        await post_blog.destroy({ where: { id } });
         res.status(200).json({ message: 'Post berhasil dihapus.' });
     } catch (error) {
         console.error('Error saat menghapus post:', error);
